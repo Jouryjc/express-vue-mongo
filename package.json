@@ -1,0 +1,39 @@
+{
+  "name": "express-vue-mongo-demo",
+  "version": "1.0.0",
+  "description": "A simple demo",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --config build/webpack.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jouryjc/express-vue-mongo.git"
+  },
+  "keywords": [
+    "vue",
+    "express",
+    "mongo"
+  ],
+  "author": "Jouryjc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jouryjc/express-vue-mongo/issues"
+  },
+  "homepage": "https://github.com/Jouryjc/express-vue-mongo#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "babel-loader": "^8.0.4",
+    "html-webpack-plugin": "^3.2.0",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
+  },
+  "dependencies": {
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.2"
+  }
+}
