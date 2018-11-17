@@ -1,9 +1,8 @@
 const WebpackCommon = require('./webpack.common')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const path = require('path')
 const webpack = require('webpack')
-const resolve = require('./utils')
+const getRootPath = require('./utils').getRootPath
 
 module.exports = merge(WebpackCommon, {
 
@@ -14,8 +13,10 @@ module.exports = merge(WebpackCommon, {
         publicPath: '/'
     },
 
+    devtool: 'cheap-module-eval-source-map',
+
     devServer: {
-        contentBase: resolve('dist'),
+        contentBase: getRootPath('dist'),
         host: 'localhost',
         port: '3333',
         open: true,
@@ -29,7 +30,7 @@ module.exports = merge(WebpackCommon, {
     },
 
     plugins: [
-        
+
         // 热替换
         new webpack.HotModuleReplacementPlugin(),
 
