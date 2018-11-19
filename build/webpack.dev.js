@@ -21,11 +21,20 @@ module.exports = merge(WebpackCommon, {
         port: '3333',
         open: true,
         inline: true,
+        hot: true,
 
         // 在浏览器上全屏显示编译的errors或warnings
         overlay: {
             errors: true,
             warnings: false
+        },
+
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8888',
+                pathRewrite: { '^/api': '' },
+                changeOrigin: true
+            }
         }
     },
 

@@ -30,4 +30,24 @@ module.exports = {
             req.sendError(e)
         }
     },
+
+    async delUser(req, res) {
+        let id = req.query._id;
+        try {
+            let data = await userModel.remove({_id: id});
+            res.send(data)
+        } catch (e) {
+            req.sendError(e)
+        }
+    },
+
+    async updateUserInfo(req, res) {
+        let paramsData = req.query;
+        try {
+            let data = await userModel.save(paramsData);
+            res.send(data)
+        } catch (e) {
+            req.sendError(e)
+        }
+    },
 }

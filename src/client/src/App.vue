@@ -1,5 +1,6 @@
 <template>
     <div>
+        <el-button type="primary" @click="_handleAdd()">添加用户</el-button>
         <el-table :data="tableData" style="width: 100%">
             <el-table-column label="姓名">
                 <template slot-scope="scope">
@@ -19,7 +20,7 @@
             </el-table-column>
         </el-table>
 
-        <edit-win ref="editWin" :visiable="visiable" :initData="initData" />
+        <opr-win ref="oprWin" :visiable="visiable" :initData="initData" />
     </div>
 </template>
 
@@ -27,15 +28,15 @@
     /**
      * @file 会员列表页面
      */
-    import EditWin from './components/edit-win.vue';
-    import axios from 'axios';
+    import OprWin from 'components/opr-win.vue'
+    import fetch from 'util/fetch'
 
     export default {
 
         name: 'app',
 
         components: {
-            EditWin
+            OprWin
         },
 
         data() {
@@ -50,7 +51,11 @@
 
         mounted() {
 
-            this.$refs.editWin.$on('reset-status', () => {
+            fetch.get('user').then((res) => {
+                console.log(res)
+            })
+
+            this.$refs.oprWin.$on('reset-status', () => {
 
                 // 关闭之后重置状态
                 this.initData = null
@@ -59,6 +64,14 @@
         },
 
         methods: {
+            _handleAdd () {
+                this.initData = {}
+                this.visiable = true
+
+                
+
+            },
+
             _handleEdit(index, row) {
                 console.log(index, row)
 
@@ -75,15 +88,21 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+                    fetch.post('user/delete', {_id: row.id}).then((res) => {
+
+                        console.log(res)
+
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        })
+                    })
+                    
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });
+                    })
                 });
             }
         }

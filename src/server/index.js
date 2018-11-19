@@ -3,16 +3,16 @@
 /**
  * Module dependencies.
  */
-
 var app = require('./app');
 var debug = require('debug')('nodelearn:server');
 var http = require('http');
+var config = require('./config');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(config.port || '3000');
 app.set('port', port);
 
 /**
@@ -87,4 +87,5 @@ function onListening() {
         'pipe ' + addr :
         'port ' + addr.port;
     debug('Listening on ' + bind);
+    console.log(`Server listening on ${bind}`)
 }

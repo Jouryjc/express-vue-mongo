@@ -12,7 +12,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            <el-button type="primary" @click="_postData">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -21,6 +21,8 @@
     /**
      * @file 编辑会员弹窗
      */
+    import fetch from 'util/fetch'
+    
     export default {
 
         name: 'editWin',
@@ -61,6 +63,18 @@
         methods: {
             _handleClose () {
                 this.$emit('reset-status')
+            },
+
+            _postData () {
+
+                let reqURL = this.initData._id ? 'editUser' : 'addUser'
+
+                fetch.post(reqURL, this.form).then(res => {
+                    console.log(res)
+                })
+
+                this.$emit('reset-status')
+                this.dialogFormVisible = false
             }
         }
     };

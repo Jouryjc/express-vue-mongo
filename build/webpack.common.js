@@ -1,30 +1,32 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { getRootPath, assetsPath } = require('./utils')
 
-const development = process.env.NODE_ENV === 'development'
-
 module.exports = {
     entry: {
         'app': getRootPath('src/client/src/main')
     },
 
     resolve: {
-        extensions: ['.js', '.vue']
+        extensions: ['.js', '.vue'],
+
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js',
+            'src': getRootPath('src'),
+            'components': getRootPath('src/client/src/components'),
+            'util': getRootPath('src/client/src/util')
+        }
     },
 
     module: {
         rules: [{
                 test: /\.js$/,
                 loader: 'babel-loader',
-                include: getRootPath("src/client/src"),
-                options: {
-                    sourceMap: development
-                }
+                exclude: /node_modules/
             },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                include: getRootPath("src/client/src")
+                exclude: /node_modules/,
             },
             {
                 test: /\.css$/,
@@ -50,5 +52,19 @@ module.exports = {
 
     plugins: [
         new VueLoaderPlugin()
-    ]
+    ],
+
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+            chunks: 'all',
+            automaticNameDelimiter: '~',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                }
+            }
+        }
+    }
 }
