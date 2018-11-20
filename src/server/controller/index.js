@@ -13,41 +13,58 @@ module.exports = {
                 }
             });
 
-            return res.send(data)
+            return res.send({
+                status: 200,
+                data: data
+            })
         } catch (e) {
-            return req.sendError(e)
+            return res.send(e)
         }
 
     },
 
     // 添加用户
     async addUser(req, res) {
-        let paramsData = req.query;
+        let paramsData = req.body;
         try {
-            let data = await userModel.create(paramsData);
-            res.send(data)
+            let data = await userModel.create(paramsData)
+            res.send({
+                status: 200,
+                data: data
+            })
         } catch (e) {
-            req.sendError(e)
+            res.send(e)
         }
     },
 
+    // 删除用户
     async delUser(req, res) {
-        let id = req.query._id;
         try {
-            let data = await userModel.remove({_id: id});
-            res.send(data)
+            let data = await userModel.deleteOne({ _id: req.body._id})
+            res.send({
+                status: 200,
+                data: data
+            })
         } catch (e) {
-            req.sendError(e)
+            req.send(e)
         }
     },
 
+    // 更新用户信息
     async updateUserInfo(req, res) {
-        let paramsData = req.query;
+        let paramsData = req.body.data;
+        console.log(paramsData)
         try {
-            let data = await userModel.save(paramsData);
-            res.send(data)
+            let data = await userModel.findOneAndUpdate({
+                _id: paramsData._id
+            }, paramsData)
+
+            res.send({
+                status: 200,
+                data: data
+            })
         } catch (e) {
-            req.sendError(e)
+            res.send(e)
         }
     },
 }

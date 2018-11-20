@@ -12,7 +12,8 @@ import {
     Form,
     FormItem,
     Input,
-    Message
+    Message,
+    Loading
 } from 'element-ui'
 
 import 'element-ui/lib/theme-chalk/index.css';
@@ -25,6 +26,7 @@ Vue.use(Dialog)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
+Vue.use(Loading)
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

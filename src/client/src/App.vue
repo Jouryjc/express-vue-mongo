@@ -1,15 +1,16 @@
 <template>
     <div>
-        <el-button type="primary" @click="_handleAdd()">添加用户</el-button>
-        <el-table :data="tableData" style="width: 100%">
+        <el-button type="primary" @click="_handleAdd()">添加</el-button>
+        <el-button type="primary" @click="_refresh()">刷新</el-button>
+        <el-table :data="tableData" style="width: 100%" v-loading="loading">
             <el-table-column label="姓名">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                    <span>{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="地址">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.address }}</span>
+                    <span>{{ scope.row.address }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -20,7 +21,23 @@
             </el-table-column>
         </el-table>
 
-        <opr-win ref="oprWin" :visiable="visiable" :initData="initData" />
+        <el-dialog title="会员信息"
+                   :visible.sync="visiable">
+            <el-form :model="form">
+                <el-form-item label="姓名">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="地址">
+                    <el-input v-model="form.address" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="visiable = false">取 消</el-button>
+                <el-button type="primary"
+                           @click="visiable = false"
+                           @click.native="_postData">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -28,16 +45,11 @@
     /**
      * @file 会员列表页面
      */
-    import OprWin from 'components/opr-win.vue'
     import fetch from 'util/fetch'
 
     export default {
 
         name: 'app',
-
-        components: {
-            OprWin
-        },
 
         data() {
             return {
@@ -45,65 +57,69 @@
 
                 visiable: false,
 
-                initData: {}
+                loading: true,
+
+                form: {
+                    name: '',
+                    address: ''
+                }
             }
         },
 
         mounted() {
-
-            fetch.get('user').then((res) => {
-                console.log(res)
-            })
-
-            this.$refs.oprWin.$on('reset-status', () => {
-
-                // 关闭之后重置状态
-                this.initData = null
-                this.visiable = false
-            })
+            this._refresh()
         },
 
         methods: {
+
+            _refresh () {
+                this.loading = true
+
+                fetch.get('user').then((res) => {
+                    this.loading = false
+                    this.tableData = res.data
+                })
+            },
+
             _handleAdd () {
-                this.initData = {}
+                this.form = {}
                 this.visiable = true
-
-                
-
             },
 
             _handleEdit(index, row) {
-                console.log(index, row)
-
-                this.initData = row
+                this.form = row
                 this.visiable = true
-
             },
 
             _handleDelete(index, row) {
-                console.log(index, row)
-
                 this.$confirm('此操作将永久删除该会员, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    fetch.post('user/delete', {_id: row.id}).then((res) => {
-
-                        console.log(res)
-
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
+                    fetch.delete('user', {_id: row._id})
+                        .then((res) => {
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            })
                         })
-                    })
-                    
-                }).catch(() => {
+                })
+            },
+
+            _postData () {
+
+                let reqFn = this.form._id ? 'put' : 'post',
+                    tip = this.form._id ? '编辑' : '添加'
+
+                fetch[reqFn]('user', this.form).then(res => {
                     this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                        type: 'success',
+                        message: `${tip}成功!`
                     })
-                });
+
+                    this._refresh()
+                })
             }
         }
     }

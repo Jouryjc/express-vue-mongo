@@ -61,7 +61,23 @@ export default {
         return axios({
             method: 'post',
             url: PREFIX + url,
-            data: qs.stringify(data),
+            data: data,
+            timeout: 30000
+        }).then(checkStatus).then(checkCode)
+    },
+
+    delete(url, data) {
+        if (!url) return
+        return axios.delete(PREFIX + url, {
+            data: data,
+            timeout: 30000
+        }).then(checkStatus).then(checkCode)
+    },
+
+    put(url, data) {
+        if (!url) return
+        return axios.put(PREFIX + url, {
+            data: data,
             timeout: 30000
         }).then(checkStatus).then(checkCode)
     }
