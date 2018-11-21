@@ -97,7 +97,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    fetch.delete('user', {_id: row._id})
+                    fetch.delete(`user/${row._id}`, {_id: row._id})
                         .then((res) => {
                             this.$message({
                                 type: 'success',
@@ -114,7 +114,7 @@
                 let reqFn = this.form._id ? 'put' : 'post',
                     tip = this.form._id ? '编辑' : '添加'
 
-                fetch[reqFn]('user', this.form).then(res => {
+                fetch[reqFn](`user/${this.form._id}`, this.form).then(res => {
                     this.$message({
                         type: 'success',
                         message: `${tip}成功!`

@@ -11,7 +11,7 @@ module.exports = () => {
             res.status(200)
 
             res.send({
-                success: 1,
+                code: 1,
                 data: json || {},
                 msg: 'success'
             })
@@ -26,7 +26,7 @@ module.exports = () => {
             res.set("Content-Type", "application/json")
 
             res.send({
-                success: 0,
+                code: 0,
                 data: {},
                 msg: msg.toString()
             })

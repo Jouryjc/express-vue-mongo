@@ -2,6 +2,7 @@ const WebpackCommon = require('./webpack.common')
 const merge = require('webpack-merge')
 const getRootPath = require('./utils').getRootPath
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const buildConfig = require('../config').client.build
 
 module.exports = merge(WebpackCommon, {
     mode: 'production',
@@ -9,10 +10,10 @@ module.exports = merge(WebpackCommon, {
     output: {
         filename: '[name]-[chunkhash].js',
         path: getRootPath('/dist/client'),
-        publicPath: '/client/'
+        publicPath: buildConfig.publicPath
     },
 
-    devtool: 'source-map',
+    devtool: buildConfig.devtoolType,
 
     plugins: [
         new HtmlWebpackPlugin({
@@ -30,6 +31,4 @@ module.exports = merge(WebpackCommon, {
             },
         })
     ]
-
-
 });

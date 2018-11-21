@@ -1,8 +1,10 @@
 const WebpackCommon = require('./webpack.common')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const webpack = require('webpack')
 const getRootPath = require('./utils').getRootPath
+const devConfig = require('../config').client.dev
 
 module.exports = merge(WebpackCommon, {
 
@@ -10,18 +12,19 @@ module.exports = merge(WebpackCommon, {
 
     output: {
         filename: '[name]-[hash].js',
-        publicPath: '/'
+        publicPath: devConfig.publicPath
     },
 
-    devtool: 'cheap-module-eval-source-map',
+    devtool: devConfig.devtoolType,
 
     devServer: {
         contentBase: getRootPath('dist'),
-        host: 'localhost',
-        port: '3333',
+        host: devConfig.host,
+        port: devConfig.port,
         open: true,
         inline: true,
         hot: true,
+        quiet: true,
 
         // 在浏览器上全屏显示编译的errors或warnings
         overlay: {
@@ -29,19 +32,21 @@ module.exports = merge(WebpackCommon, {
             warnings: false
         },
 
-        proxy: {
-            '/api': {
-                target: 'http://localhost:8888',
-                pathRewrite: { '^/api': '' },
-                changeOrigin: true
-            }
-        }
+        proxy: devConfig.proxyTable
     },
 
     plugins: [
 
         // 热替换
         new webpack.HotModuleReplacementPlugin(),
+
+        // 编译友好提示插件
+        new FriendlyErrorsWebpackPlugin({
+
+            compilationSuccessInfo: {
+                messages: [`You application is running here http://${devConfig.host}:${devConfig.port}`],
+            }
+        }),
 
         // 配置html入口信息
         new HtmlWebpackPlugin({
