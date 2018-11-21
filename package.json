@@ -6,7 +6,10 @@
     "scripts": {
         "dev": "webpack-dev-server --config build/webpack.dev.js",
         "build": "node build/build.js",
-        "server": "nodemon src/server/index.js"
+        "server": "nodemon src/server/index.js",
+        "start": "pm2 start src/server/ecosystem.config.js --env production",
+        "stop": "pm2 stop src/server/ecosystem.config.js",
+        "restart": "pm2 restart src/server/ecosystem.config.js --env production"
     },
     "repository": {
         "type": "git",
