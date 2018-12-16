@@ -13,6 +13,7 @@ module.exports = merge(WebpackCommon, {
         publicPath: buildConfig.publicPath
     },
 
+    // 控制如何生成 source map
     devtool: buildConfig.devtoolType,
 
     plugins: [

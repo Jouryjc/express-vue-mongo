@@ -112,9 +112,10 @@
             _postData () {
 
                 let reqFn = this.form._id ? 'put' : 'post',
+                    reqURL = this.form._id ? `user/${this.form._id}` : 'user',
                     tip = this.form._id ? '编辑' : '添加'
 
-                fetch[reqFn](`user/${this.form._id}`, this.form).then(res => {
+                fetch[reqFn](reqURL, this.form).then(res => {
                     this.$message({
                         type: 'success',
                         message: `${tip}成功!`
